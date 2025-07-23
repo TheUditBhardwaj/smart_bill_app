@@ -15,44 +15,56 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Smart Billing App',
       theme: ThemeData(
-        primarySwatch: Colors.indigo, // A base color for the app
-        scaffoldBackgroundColor: const Color(0xFFF0F4F8), // Light blue-gray background
+        brightness: Brightness.dark, // Set overall theme to dark
+        primarySwatch: Colors.grey, // Using grey as primary swatch for shades
+        scaffoldBackgroundColor: const Color(0xFF000000), // Pure Black background
         appBarTheme: const AppBarTheme(
-          backgroundColor: Color(0xFFC3DAF9), // Pastel blue for app bar
-          foregroundColor: Color(0xFF334155), // Darker text on app bar
-          elevation: 0,
+          backgroundColor: Color(0xFF000000), // Pure Black app bar
+          foregroundColor: Colors.white, // White text on app bar
+          elevation: 0, // Flat design for app bar
         ),
-        cardTheme: CardThemeData( // Corrected from CardTheme to CardThemeData
-          elevation: 2,
+        cardTheme: CardThemeData(
+          elevation: 4, // Moderate elevation for depth
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-          color: Colors.white,
+          color: const Color(0xFF1A1A1A), // Dark grey for cards to provide contrast from pure black background
+          margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
         ),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
-            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-            textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-            elevation: 3,
+            padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 24),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            textStyle: const TextStyle(fontSize: 17, fontWeight: FontWeight.w700),
+            elevation: 5,
+            backgroundColor: Colors.white, // White buttons for strong action
+            foregroundColor: Colors.black, // Black text on white buttons
           ),
         ),
         inputDecorationTheme: InputDecorationTheme(
           filled: true,
-          fillColor: Colors.white,
+          fillColor: const Color(0xFF0A0A0A), // Slightly lighter black for input fields
           border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(10),
             borderSide: BorderSide.none,
           ),
           enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(10),
             borderSide: BorderSide.none,
           ),
           focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8),
-            borderSide: const BorderSide(color: Color(0xFF6B7280), width: 2), // Slightly darker on focus
+            borderRadius: BorderRadius.circular(10),
+            borderSide: const BorderSide(color: Colors.white, width: 2), // White border on focus
           ),
-          contentPadding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+          contentPadding: const EdgeInsets.symmetric(vertical: 14, horizontal: 18),
+          labelStyle: const TextStyle(color: Colors.white70), // Light grey label text
+          hintStyle: const TextStyle(color: Colors.white54), // Lighter grey hint text
         ),
-        fontFamily: 'Inter', // Assuming Inter font is available or similar sans-serif
+        fontFamily: 'Inter',
+        textTheme: const TextTheme(
+          headlineSmall: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          titleLarge: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
+          bodyMedium: TextStyle(color: Colors.white70),
+          labelLarge: TextStyle(color: Colors.white),
+        ),
       ),
       home: const SmartBillingHomePage(),
     );
@@ -311,7 +323,7 @@ class _SmartBillingHomePageState extends State<SmartBillingHomePage> {
       );
 
       if (response.statusCode == 200) {
-        _showMessage('Bill generated and email sent successfully!');
+        _showMessage('Bill generated and email sent successfully! 📧');
         setState(() {
           _currentBill.clear();
           _selectedCustomer = null;
@@ -335,7 +347,7 @@ class _SmartBillingHomePageState extends State<SmartBillingHomePage> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(message),
-        backgroundColor: isError ? Colors.red.shade400 : Colors.green.shade400,
+        backgroundColor: isError ? Colors.red.shade700 : Colors.green.shade700, // Stronger red/green for alerts
         duration: const Duration(seconds: 3),
       ),
     );
@@ -374,7 +386,7 @@ class _SmartBillingHomePageState extends State<SmartBillingHomePage> {
           quantity: product.quantity - quantity,
         );
       }
-      _showMessage('$quantity x ${product.name} added to bill.');
+      _showMessage('$quantity x ${product.name} added to bill. ✅');
     });
   }
 
@@ -392,7 +404,7 @@ class _SmartBillingHomePageState extends State<SmartBillingHomePage> {
         );
       }
       _currentBill.removeWhere((item) => item.id == productId);
-      _showMessage('${itemToRemove.name} removed from bill.');
+      _showMessage('${itemToRemove.name} removed from bill. 🗑️');
     });
   }
 
@@ -413,7 +425,7 @@ class _SmartBillingHomePageState extends State<SmartBillingHomePage> {
         title: const Text('Smart Billing App'),
         centerTitle: true,
         bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(kToolbarHeight),
+          preferredSize: const Size.fromHeight(kToolbarHeight + 16),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
             child: Row(
@@ -423,8 +435,9 @@ class _SmartBillingHomePageState extends State<SmartBillingHomePage> {
                   child: ElevatedButton(
                     onPressed: () => setState(() => _activeTabIndex = 0),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: _activeTabIndex == 0 ? const Color(0xFF81B2F9) : const Color(0xFFE0E7F4), // Pastel blue/gray
-                      foregroundColor: _activeTabIndex == 0 ? Colors.white : const Color(0xFF334155),
+                      backgroundColor: _activeTabIndex == 0 ? Colors.white : const Color(0xFF1A1A1A), // White active, dark grey inactive
+                      foregroundColor: _activeTabIndex == 0 ? Colors.black : Colors.white,
+                      elevation: _activeTabIndex == 0 ? 8 : 2,
                     ),
                     child: const Text('Dashboard'),
                   ),
@@ -434,8 +447,9 @@ class _SmartBillingHomePageState extends State<SmartBillingHomePage> {
                   child: ElevatedButton(
                     onPressed: () => setState(() => _activeTabIndex = 1),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: _activeTabIndex == 1 ? const Color(0xFF81B2F9) : const Color(0xFFE0E7F4),
-                      foregroundColor: _activeTabIndex == 1 ? Colors.white : const Color(0xFF334155),
+                      backgroundColor: _activeTabIndex == 1 ? Colors.white : const Color(0xFF1A1A1A),
+                      foregroundColor: _activeTabIndex == 1 ? Colors.black : Colors.white,
+                      elevation: _activeTabIndex == 1 ? 8 : 2,
                     ),
                     child: const Text('Create Bill'),
                   ),
@@ -468,18 +482,18 @@ class _SmartBillingHomePageState extends State<SmartBillingHomePage> {
   Widget _buildProductManagementSection() {
     return Card(
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(20.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Product Inventory', style: Theme.of(context).textTheme.headlineSmall),
-            const SizedBox(height: 16),
+            Text('Product Inventory 📦', style: Theme.of(context).textTheme.headlineSmall),
+            const SizedBox(height: 20),
             _buildProductForm(),
-            const SizedBox(height: 24),
+            const SizedBox(height: 30),
             Text('Existing Products', style: Theme.of(context).textTheme.titleLarge),
-            const SizedBox(height: 12),
+            const SizedBox(height: 16),
             _products.isEmpty
-                ? const Text('No products in inventory. Add some!')
+                ? const Text('No products in inventory. Add some!', style: TextStyle(color: Colors.white70))
                 : ListView.builder(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
@@ -487,25 +501,26 @@ class _SmartBillingHomePageState extends State<SmartBillingHomePage> {
               itemBuilder: (context, index) {
                 final product = _products[index];
                 return Card(
-                  margin: const EdgeInsets.symmetric(vertical: 6),
-                  elevation: 1,
+                  margin: const EdgeInsets.symmetric(vertical: 8),
+                  elevation: 2,
+                  color: const Color(0xFF0A0A0A), // Even darker card for list items
                   child: Padding(
-                    padding: const EdgeInsets.all(12.0),
+                    padding: const EdgeInsets.all(16.0),
                     child: Row(
                       children: [
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(product.name, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-                              Text('Price: \$${product.price.toStringAsFixed(2)} | Quantity: ${product.quantity}', style: const TextStyle(color: Colors.grey)),
+                              Text(product.name, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Colors.white)),
+                              const SizedBox(height: 4),
+                              Text('Price: \₹${product.price.toStringAsFixed(2)} | Quantity: ${product.quantity}', style: const TextStyle(color: Colors.white70)),
                             ],
                           ),
                         ),
                         IconButton(
-                          icon: const Icon(Icons.edit, color: Color(0xFFF9C381)), // Pastel yellow
+                          icon: const Icon(Icons.edit, color: Colors.white), // White icon for edit
                           onPressed: () {
-                            // Populate form for editing
                             _productNameController.text = product.name;
                             _productPriceController.text = product.price.toString();
                             _productQuantityController.text = product.quantity.toString();
@@ -513,11 +528,12 @@ class _SmartBillingHomePageState extends State<SmartBillingHomePage> {
                               context: context,
                               builder: (BuildContext context) {
                                 return AlertDialog(
-                                  title: const Text('Edit Product'),
+                                  backgroundColor: const Color(0xFF1A1A1A), // Dark background for dialog
+                                  title: const Text('Edit Product', style: TextStyle(color: Colors.white)),
                                   content: _buildProductForm(initialProduct: product),
                                   actions: <Widget>[
                                     TextButton(
-                                      child: const Text('Cancel'),
+                                      child: const Text('Cancel', style: TextStyle(color: Colors.white)),
                                       onPressed: () {
                                         Navigator.of(context).pop();
                                         _clearProductForm();
@@ -530,7 +546,7 @@ class _SmartBillingHomePageState extends State<SmartBillingHomePage> {
                           },
                         ),
                         IconButton(
-                          icon: const Icon(Icons.delete, color: Color(0xFFF98181)), // Pastel red
+                          icon: const Icon(Icons.delete, color: Colors.white), // White icon for delete
                           onPressed: () => _deleteProduct(product.id!),
                         ),
                       ],
@@ -558,21 +574,24 @@ class _SmartBillingHomePageState extends State<SmartBillingHomePage> {
       children: [
         TextField(
           controller: _productNameController,
-          decoration: const InputDecoration(labelText: 'Product Name'),
-        ),
-        const SizedBox(height: 12),
-        TextField(
-          controller: _productPriceController,
-          decoration: const InputDecoration(labelText: 'Price'),
-          keyboardType: TextInputType.number,
-        ),
-        const SizedBox(height: 12),
-        TextField(
-          controller: _productQuantityController,
-          decoration: const InputDecoration(labelText: 'Quantity'),
-          keyboardType: TextInputType.number,
+          decoration: const InputDecoration(labelText: 'Product Name', labelStyle: TextStyle(color: Colors.white70)),
+          style: const TextStyle(color: Colors.white), // Text input color
         ),
         const SizedBox(height: 16),
+        TextField(
+          controller: _productPriceController,
+          decoration: const InputDecoration(labelText: 'Price', labelStyle: TextStyle(color: Colors.white70)),
+          keyboardType: TextInputType.number,
+          style: const TextStyle(color: Colors.white),
+        ),
+        const SizedBox(height: 16),
+        TextField(
+          controller: _productQuantityController,
+          decoration: const InputDecoration(labelText: 'Quantity', labelStyle: TextStyle(color: Colors.white70)),
+          keyboardType: TextInputType.number,
+          style: const TextStyle(color: Colors.white),
+        ),
+        const SizedBox(height: 20),
         ElevatedButton(
           onPressed: () {
             final name = _productNameController.text;
@@ -585,15 +604,17 @@ class _SmartBillingHomePageState extends State<SmartBillingHomePage> {
               } else {
                 _updateProduct(Product(id: initialProduct.id, name: name, price: price, quantity: quantity));
               }
-              Navigator.of(context).pop(); // Close dialog if it's an edit
+              if (Navigator.of(context).canPop()) {
+                Navigator.of(context).pop();
+              }
               _clearProductForm();
             } else {
               _showMessage('Please fill all product fields correctly.', isError: true);
             }
           },
           style: ElevatedButton.styleFrom(
-            backgroundColor: const Color(0xFF81B2F9), // Pastel blue
-            foregroundColor: Colors.white,
+            backgroundColor: Colors.white,
+            foregroundColor: Colors.black,
           ),
           child: Text(initialProduct == null ? 'Add Product' : 'Update Product'),
         ),
@@ -610,18 +631,18 @@ class _SmartBillingHomePageState extends State<SmartBillingHomePage> {
   Widget _buildCustomerManagementSection() {
     return Card(
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(20.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Customer Details', style: Theme.of(context).textTheme.headlineSmall),
-            const SizedBox(height: 16),
+            Text('Customer Details 👥', style: Theme.of(context).textTheme.headlineSmall),
+            const SizedBox(height: 20),
             _buildCustomerForm(),
-            const SizedBox(height: 24),
+            const SizedBox(height: 30),
             Text('Existing Customers', style: Theme.of(context).textTheme.titleLarge),
-            const SizedBox(height: 12),
+            const SizedBox(height: 16),
             _customers.isEmpty
-                ? const Text('No customers added yet.')
+                ? const Text('No customers added yet.', style: TextStyle(color: Colors.white70))
                 : ListView.builder(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
@@ -629,15 +650,17 @@ class _SmartBillingHomePageState extends State<SmartBillingHomePage> {
               itemBuilder: (context, index) {
                 final customer = _customers[index];
                 return Card(
-                  margin: const EdgeInsets.symmetric(vertical: 6),
-                  elevation: 1,
+                  margin: const EdgeInsets.symmetric(vertical: 8),
+                  elevation: 2,
+                  color: const Color(0xFF0A0A0A),
                   child: Padding(
-                    padding: const EdgeInsets.all(12.0),
+                    padding: const EdgeInsets.all(16.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(customer.name, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-                        Text('Phone: ${customer.phone} | Email: ${customer.email}', style: const TextStyle(color: Colors.grey)),
+                        Text(customer.name, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Colors.white)),
+                        const SizedBox(height: 4),
+                        Text('Phone: ${customer.phone} | Email: ${customer.email}', style: const TextStyle(color: Colors.white70)),
                       ],
                     ),
                   ),
@@ -655,21 +678,24 @@ class _SmartBillingHomePageState extends State<SmartBillingHomePage> {
       children: [
         TextField(
           controller: _customerNameController,
-          decoration: const InputDecoration(labelText: 'Customer Name'),
-        ),
-        const SizedBox(height: 12),
-        TextField(
-          controller: _customerPhoneController,
-          decoration: const InputDecoration(labelText: 'Phone'),
-          keyboardType: TextInputType.phone,
-        ),
-        const SizedBox(height: 12),
-        TextField(
-          controller: _customerEmailController,
-          decoration: const InputDecoration(labelText: 'Email'),
-          keyboardType: TextInputType.emailAddress,
+          decoration: const InputDecoration(labelText: 'Customer Name', labelStyle: TextStyle(color: Colors.white70)),
+          style: const TextStyle(color: Colors.white),
         ),
         const SizedBox(height: 16),
+        TextField(
+          controller: _customerPhoneController,
+          decoration: const InputDecoration(labelText: 'Phone', labelStyle: TextStyle(color: Colors.white70)),
+          keyboardType: TextInputType.phone,
+          style: const TextStyle(color: Colors.white),
+        ),
+        const SizedBox(height: 16),
+        TextField(
+          controller: _customerEmailController,
+          decoration: const InputDecoration(labelText: 'Email', labelStyle: TextStyle(color: Colors.white70)),
+          keyboardType: TextInputType.emailAddress,
+          style: const TextStyle(color: Colors.white),
+        ),
+        const SizedBox(height: 20),
         ElevatedButton(
           onPressed: () {
             final name = _customerNameController.text;
@@ -684,8 +710,8 @@ class _SmartBillingHomePageState extends State<SmartBillingHomePage> {
             }
           },
           style: ElevatedButton.styleFrom(
-            backgroundColor: const Color(0xFF98D8AA), // Pastel green
-            foregroundColor: Colors.white,
+            backgroundColor: Colors.white,
+            foregroundColor: Colors.black,
           ),
           child: const Text('Add Customer'),
         ),
@@ -706,23 +732,52 @@ class _SmartBillingHomePageState extends State<SmartBillingHomePage> {
         children: [
           Card(
             child: Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(20.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Select Products for Bill', style: Theme.of(context).textTheme.headlineSmall),
-                  const SizedBox(height: 16),
+                  Text('Select Products for Bill 🛒', style: Theme.of(context).textTheme.headlineSmall),
+                  const SizedBox(height: 18),
                   DropdownButtonFormField<Customer>(
                     value: _selectedCustomer,
+                    dropdownColor: const Color(0xFF1A1A1A), // Dark dropdown background
+                    style: const TextStyle(color: Colors.white, fontSize: 13),
                     decoration: const InputDecoration(
                       labelText: 'Select Customer',
+                      labelStyle: TextStyle(color: Colors.white70),
                     ),
+                    // Add selectedItemBuilder to control how the selected item is displayed
+                    selectedItemBuilder: (BuildContext context) {
+                      return _customers.map<Widget>((Customer customer) {
+                        return Align(
+                          alignment: Alignment.centerLeft, // Align text to the left
+                          child: Text(
+                            '${customer.name} (${customer.email})',
+                            style: const TextStyle(color: Colors.white, fontSize: 14),
+                            overflow: TextOverflow.ellipsis, // Ensure overflow handling
+                            maxLines: 1, // Restrict to a single line
+                          ),
+                        );
+                      }).toList();
+                    },
                     items: [
-                      const DropdownMenuItem(value: null, child: Text('-- Select a Customer --')),
+                      const DropdownMenuItem(
+                        value: null,
+                        child: Text(
+                          '-- Select a Customer --',
+                          style: TextStyle(color: Colors.white70),
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1, // Also for the placeholder
+                        ),
+                      ),
                       ..._customers.map((customer) =>
                           DropdownMenuItem(
                             value: customer,
-                            child: Text('${customer.name} (${customer.email})'),
+                            child: Text( // No need for Expanded here if selectedItemBuilder is used for display
+                              '${customer.name} (${customer.email})',
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                            ),
                           ),
                       ),
                     ],
@@ -736,56 +791,63 @@ class _SmartBillingHomePageState extends State<SmartBillingHomePage> {
                   TextField(
                     decoration: const InputDecoration(
                       labelText: 'Search Products',
-                      prefixIcon: Icon(Icons.search),
+                      prefixIcon: Icon(Icons.search, color: Colors.white70),
+                      labelStyle: TextStyle(color: Colors.white70),
                     ),
                     onChanged: (value) {
                       setState(() {
                         _productSearchTerm = value;
                       });
                     },
+                    style: const TextStyle(color: Colors.white),
                   ),
                   const SizedBox(height: 24),
                   Text('Available Products', style: Theme.of(context).textTheme.titleLarge),
-                  const SizedBox(height: 12),
+                  const SizedBox(height: 16),
                   _products.isEmpty
-                      ? const Text('No products found or available.')
+                      ? const Text('No products found or available.', style: TextStyle(color: Colors.white70))
                       : ListView.builder(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
-                    itemCount: _filteredProducts.length, // Using the getter here
+                    itemCount: _filteredProducts.length,
                     itemBuilder: (context, index) {
-                      final product = _filteredProducts[index]; // Using the getter here
+                      final product = _filteredProducts[index];
                       final TextEditingController qtyController = TextEditingController(text: '1');
                       return Card(
-                        margin: const EdgeInsets.symmetric(vertical: 6),
-                        elevation: 1,
+                        margin: const EdgeInsets.symmetric(vertical: 8),
+                        elevation: 2,
+                        color: const Color(0xFF0A0A0A),
                         child: Padding(
-                          padding: const EdgeInsets.all(12.0),
+                          padding: const EdgeInsets.all(16.0),
                           child: Row(
                             children: [
                               Expanded(
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(product.name, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-                                    Text('Price: \$${product.price.toStringAsFixed(2)} | Available: ${product.quantity}', style: const TextStyle(color: Colors.grey)),
+                                    Text(product.name, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Colors.white)),
+                                    const SizedBox(height: 4),
+                                    Text('Price: \₹${product.price.toStringAsFixed(2)} | Available: ${product.quantity}', style: const TextStyle(color: Colors.white70)),
                                   ],
                                 ),
                               ),
                               SizedBox(
-                                width: 60,
+                                width: 70,
                                 child: TextField(
                                   controller: qtyController,
                                   keyboardType: TextInputType.number,
                                   textAlign: TextAlign.center,
-                                  decoration: const InputDecoration(
+                                  style: const TextStyle(color: Colors.white),
+                                  decoration: InputDecoration(
                                     isDense: true,
                                     contentPadding: EdgeInsets.zero,
-                                    border: OutlineInputBorder(),
+                                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                                    fillColor: const Color(0xFF000000), // Pure black fill
+                                    filled: true,
                                   ),
                                 ),
                               ),
-                              const SizedBox(width: 8),
+                              const SizedBox(width: 12),
                               ElevatedButton(
                                 onPressed: product.quantity == 0
                                     ? null
@@ -798,8 +860,8 @@ class _SmartBillingHomePageState extends State<SmartBillingHomePage> {
                                   }
                                 },
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor: const Color(0xFF81B2F9), // Pastel blue
-                                  foregroundColor: Colors.white,
+                                  backgroundColor: Colors.white,
+                                  foregroundColor: Colors.black,
                                 ),
                                 child: const Text('Add'),
                               ),
@@ -816,22 +878,22 @@ class _SmartBillingHomePageState extends State<SmartBillingHomePage> {
           const SizedBox(height: 24),
           Card(
             child: Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(20.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Bill Preview', style: Theme.of(context).textTheme.headlineSmall),
-                  const SizedBox(height: 16),
+                  Text('Bill Preview 📝', style: Theme.of(context).textTheme.headlineSmall),
+                  const SizedBox(height: 20),
                   if (_selectedCustomer != null)
                     Padding(
-                      padding: const EdgeInsets.only(bottom: 12.0),
+                      padding: const EdgeInsets.only(bottom: 16.0),
                       child: Text(
                         'Customer: ${_selectedCustomer!.name} (${_selectedCustomer!.email})',
-                        style: const TextStyle(fontWeight: FontWeight.w600),
+                        style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16, color: Colors.white),
                       ),
                     ),
                   _currentBill.isEmpty
-                      ? const Text('No items in the bill yet.')
+                      ? const Text('No items in the bill yet.', style: TextStyle(color: Colors.white70))
                       : ListView.builder(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
@@ -839,24 +901,26 @@ class _SmartBillingHomePageState extends State<SmartBillingHomePage> {
                     itemBuilder: (context, index) {
                       final item = _currentBill[index];
                       return Card(
-                        margin: const EdgeInsets.symmetric(vertical: 6),
-                        elevation: 1,
+                        margin: const EdgeInsets.symmetric(vertical: 8),
+                        elevation: 2,
+                        color: const Color(0xFF0A0A0A),
                         child: Padding(
-                          padding: const EdgeInsets.all(12.0),
+                          padding: const EdgeInsets.all(16.0),
                           child: Row(
                             children: [
                               Expanded(
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(item.name, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-                                    Text('\$${item.price.toStringAsFixed(2)} x ${item.billedQuantity}', style: const TextStyle(color: Colors.grey)),
+                                    Text(item.name, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Colors.white)),
+                                    const SizedBox(height: 4),
+                                    Text('\₹${item.price.toStringAsFixed(2)} x ${item.billedQuantity}', style: const TextStyle(color: Colors.white70)),
                                   ],
                                 ),
                               ),
-                              Text('\$${(item.price * item.billedQuantity).toStringAsFixed(2)}', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                              Text('\₹${(item.price * item.billedQuantity).toStringAsFixed(2)}', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Colors.white)),
                               IconButton(
-                                icon: const Icon(Icons.remove_circle, color: Color(0xFFF98181)), // Pastel red
+                                icon: const Icon(Icons.remove_circle, color: Colors.white), // White icon for remove
                                 onPressed: () => _removeProductFromBill(item.id),
                               ),
                             ],
@@ -865,12 +929,12 @@ class _SmartBillingHomePageState extends State<SmartBillingHomePage> {
                       );
                     },
                   ),
-                  const Divider(height: 30, thickness: 1),
+                  const Divider(height: 30, thickness: 1, color: Colors.white54),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('Total:', style: Theme.of(context).textTheme.titleLarge),
-                      Text('\$${_calculateTotal().toStringAsFixed(2)}', style: Theme.of(context).textTheme.headlineSmall?.copyWith(color: Theme.of(context).primaryColor)),
+                      Text('Total:', style: Theme.of(context).textTheme.titleLarge?.copyWith(fontSize: 22)),
+                      Text('\₹${_calculateTotal().toStringAsFixed(2)}', style: Theme.of(context).textTheme.headlineSmall?.copyWith(color: Colors.white, fontSize: 24)), // White for total
                     ],
                   ),
                   const SizedBox(height: 24),
@@ -878,9 +942,9 @@ class _SmartBillingHomePageState extends State<SmartBillingHomePage> {
                     child: ElevatedButton(
                       onPressed: _generateAndSendBill,
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF98D8AA), // Pastel green
-                        foregroundColor: Colors.white,
-                        minimumSize: const Size(double.infinity, 50), // Make button full width
+                        backgroundColor: Colors.white,
+                        foregroundColor: Colors.black,
+                        minimumSize: const Size(double.infinity, 55),
                       ),
                       child: const Text('Generate & Send Bill'),
                     ),

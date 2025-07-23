@@ -235,7 +235,7 @@ SMTP_PASSWORD = os.getenv("SMTP_PASSWORD", "your_email_password") # Your email p
 
 def generate_bill_pdf(bill_data: BillData) -> bytes:
     """Generates a PDF bill from the provided bill data."""
-    pdf = FPDF()
+    pdf = FPDF()``
     pdf.add_page()
     pdf.set_font("Arial", size=12)
 
